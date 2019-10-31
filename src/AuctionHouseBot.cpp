@@ -375,15 +375,25 @@ void AuctionHouseBot::addNewAuctions(Player *AHBplayer, AHBConfig *config)
             uint64 bidPrice = 0;
             uint32 stackCount = 1;
 
+
+            /* REPLACE WITH if STATEMENT FOR TRAVIS COMPILE
             switch (SellMethod)
             {
-            case 0:
+            case false:
                 buyoutPrice  = prototype->SellPrice;
                 break;
-            case 1:
+            case true:
                 buyoutPrice  = prototype->BuyPrice;
                 break;
             }
+            */
+
+            if (SellMethod)
+            {
+                buyoutPrice = prototype->BuyPrice;
+            } else {
+                buyoutPrice = prototype->SellPrice;
+                }
 
             if (prototype->Quality <= AHB_MAX_QUALITY)
             {
@@ -571,6 +581,7 @@ void AuctionHouseBot::addNewAuctionBuyerBotBid(Player *AHBplayer, AHBConfig *con
         long double bidMax = 0;
 
         // check that bid has acceptable value and take bid based on vendorprice, stacksize and quality
+        /* REPLACE WITH if STATEMENT FOR TRAVIS COMPILE 
         switch (BuyMethod)
         {
         case 0:
@@ -604,6 +615,33 @@ void AuctionHouseBot::addNewAuctionBuyerBotBid(Player *AHBplayer, AHBConfig *con
                 break;
             }
         }
+        */
+        if (BuyMethod)
+        {
+            if (prototype->Quality <= AHB_MAX_QUALITY)
+            {
+                if (currentprice < prototype->SellPrice * pItem->GetCount() * config->GetBuyerPrice(prototype->Quality))
+                    bidMax = prototype->SellPrice * pItem->GetCount() * config->GetBuyerPrice(prototype->Quality);
+            }
+            else
+            {
+                // quality is something it shouldn't be, let's get out of here
+                if (debug_Out) sLog->outError( "AHBuyer: Quality %u not Supported", prototype->Quality);
+                    continue;
+            }
+        } else {
+            if (prototype->Quality <= AHB_MAX_QUALITY)
+            {
+                if (currentprice < prototype->BuyPrice * pItem->GetCount() * config->GetBuyerPrice(prototype->Quality))
+                    bidMax = prototype->BuyPrice * pItem->GetCount() * config->GetBuyerPrice(prototype->Quality);
+            }
+            else
+            {
+                // quality is something it shouldn't be, let's get out of here
+                if (debug_Out) sLog->outError( "AHBuyer: Quality %u not Supported", prototype->Quality);
+                    continue;
+            }
+        }        
 
         // check some special items, and do recalculating to their prices
         switch (prototype->Class)
@@ -866,17 +904,29 @@ void AuctionHouseBot::Initialize()
                 break;
             }
 
+            /* REPLACE WITH if STATEMENT FOR TRAVIS COMPILE
             switch (SellMethod)
             {
-            case 0:
+            case false:
                 if (itr->second.SellPrice == 0)
                     continue;
                 break;
-            case 1:
+            case true:
                 if (itr->second.BuyPrice == 0)
                     continue;
                 break;
             }
+            */
+
+            if (SellMethod)
+            {
+                if (itr->second.BuyPrice == 0)
+                    continue;
+            } else {
+                if (itr->second.SellPrice == 0)
+                    continue;
+                }
+            
 
             if (itr->second.Quality > 6)
                 continue;
