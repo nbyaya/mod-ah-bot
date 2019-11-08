@@ -1,7 +1,5 @@
-# ![logo](https://raw.githubusercontent.com/azerothcore/azerothcore.github.io/master/images/logo-github.png) AzerothCore
-- Latest build status with azerothcore: [![Build Status](https://travis-ci.org/azerothcore/mod-ah-bot.svg?branch=master)](https://travis-ci.org/azerothcore/mod-ah-bot)
 # Mod-AHBOT
-
+- Latest build status with azerothcore: [![Build Status](https://travis-ci.org/milestorme/mod-ah-bot.svg?branch=master)](https://travis-ci.org/milestorme/mod-ah-bot)
 
 ## Description
 
@@ -11,7 +9,7 @@ A ahbot module for azerothcore.
 ## Installation
 
 ```
-1. Apply ahbot.patch to your core.
+1. Apply ahbot.patch to your core Manually.
 2. Simply place the module under the `modules` directory of your AzerothCore source. 
 3. Import the SQL manually to the right Database (auth, world or characters) or with the `db_assembler.sh` (if `include.sh` provided).
 4. Re-run cmake and launch a clean build of AzerothCore.
@@ -25,4 +23,3 @@ rename the file mod_ahbot.conf.dist to mod_ahbot.conf and edit it.
 
 ## Credits
 ayase
-
