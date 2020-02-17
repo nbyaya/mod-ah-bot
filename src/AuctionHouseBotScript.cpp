@@ -21,11 +21,6 @@ public:
         sLog->outString("Initialize AuctionHouseBot...");
         auctionbot->Initialize();
     }
-
-    void OnUpdate(uint32 /*diff*/) override
-    {
-        auctionbot->Update();
-    }
 };
 
 class AHBot_AuctionHouseScript : public AuctionHouseScript
@@ -62,6 +57,11 @@ public:
     void OnAuctionRemove(AuctionHouseObject* /*ah*/, AuctionEntry* auction) override
     {
         auctionbot->DecrementItemCounts(auction, auction->item_template);
+    }
+
+    void OnBeforeAuctionHouseMgrUpdate() override
+    {
+        auctionbot->Update();
     }
 };
 
