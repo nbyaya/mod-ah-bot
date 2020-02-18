@@ -26,7 +26,10 @@ rename the file mod_ahbot.conf.dist to mod_ahbot.conf and edit it.
 
 Edit the module configuration and add a player account ID and a character ID.
 This character will sell and buy items in the auction house so give him a good name.
-The account used does not need any security level and can be a player account.
+
+Notes:
+- The account used does not need any security level and can be a player account.
+- The character used by the ahbot is not meant to be used ingame. If you use it to browse the auction house, you might have issues like "Searching for items..." displaying forever.
 
 
 ## Credits
