@@ -26,6 +26,9 @@
 #include <vector>
 
 using namespace std;
+//Class, Subclass, then rarity, so 4 fold vector
+unordered_map<uint32, unordered_map<uint32, unordered_map<uint32, vector<uint32> >>> auctionItemMap;
+
 vector<uint32> npcItems;
 vector<uint32> lootItems;
 vector<uint32> greyTradeGoodsBin;
@@ -743,6 +746,57 @@ void AuctionHouseBot::Update()
         _lastrun_n = _newrun;
     }
     sObjectAccessor->RemoveObject(&_AHBplayer);
+}
+
+void AuctionHouseBot::SelectItemsFromDB() {
+    QueryResult result = WorldDatabase.PQuery("SELECT item FROM mod_auctionhousebot_disabled_items");
+
+    if (result)
+    {
+        do
+        {
+            Field* fields = result->Fetch();
+            DisableItemStore.insert(fields[0].GetUInt32());
+        } while (result->NextRow());
+    }
+
+    QueryResult result2 = WorldDatabase.PQuery("SELECT entry, class, subclass, Quality FROM item_template");
+
+    if (result2)
+    {
+        do
+        {
+            Field* fields = result2->Fetch();
+            uint32 itemID = fields[0].GetUInt32();
+            if (DisableItemStore.find(itemID) != DisableItemStore.end()) {
+                uint32 itemClass = fields[1].GetUInt32();
+                uint32 itemSublass = fields[2].GetUInt32();
+                uint32 itemQuality = fields[3].GetUInt32();
+                unordered_map<uint32, unordered_map<uint32, vector<uint32>>> classMap;
+                try {
+                    classMap = auctionItemMap.at(itemClass);
+                }
+                catch(out_of_range){
+                    auctionItemMap.insert_or_assign(itemClass, classMap);
+                }
+                unordered_map<uint32, vector<uint32>> subclassMap;
+                try {
+                    subclassMap = classMap.at(itemSublass);
+                }
+                catch (out_of_range) {
+                    classMap.insert_or_assign(itemSublass, subclassMap);
+                }
+                vector<uint32> qualityVector;
+                try {
+                    qualityVector = subclassMap.at(itemQuality);
+                }
+                catch (out_of_range) {
+                    subclassMap.insert_or_assign(itemQuality, qualityVector);
+                }
+                qualityVector.push_back(itemID);
+            }
+        } while (result2->NextRow());
+    }
 }
 
 void AuctionHouseBot::Initialize()

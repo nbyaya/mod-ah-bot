@@ -1245,6 +1245,7 @@ public:
 
     ~AuctionHouseBot();
     void Update();
+    void SelectItemsFromDB();
     void Initialize();
     void InitializeConfiguration();
     void LoadValues(AHBConfig*);
