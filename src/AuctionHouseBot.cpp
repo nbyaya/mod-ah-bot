@@ -32,7 +32,6 @@ using namespace std;
 
 vector<uint32> npcItems;
 vector<uint32> lootItems;
-
 AuctionHouseBot::AuctionHouseBot()
 {
     debug_Out = false;
@@ -104,11 +103,7 @@ AuctionHouseBot::AuctionHouseBot()
     HordeConfig = AHBConfig(6);
     NeutralConfig = AHBConfig(7);
 }
-
-AuctionHouseBot::~AuctionHouseBot()
-{
-}
-
+AuctionHouseBot::~AuctionHouseBot(){}
 void AuctionHouseBot::addNewAuctions(Player *AHBplayer, AHBConfig *config)
 {
     if (!AHBSeller)
@@ -126,27 +121,13 @@ void AuctionHouseBot::addNewAuctions(Player *AHBplayer, AHBConfig *config)
     }
 
     AuctionHouseEntry const* ahEntry =  sAuctionMgr->GetAuctionHouseEntry(config->GetAHFID());
-    if (!ahEntry)
-    {
-        return;
-    }
+    if (!ahEntry){return;}
     AuctionHouseObject* auctionHouse =  sAuctionMgr->GetAuctionsMap(config->GetAHFID());
-    if (!auctionHouse)
-    {
-        return;
-    }
+    if (!auctionHouse){return;}
 
     uint32 auctions = auctionHouse->Getcount();
-
     uint32 items = 0;
-
-    if (auctions >= minItems)
-    {
-        //if (debug_Out) sLog->outError( "AHSeller: Auctions above minimum");
-        return;
-    }
-
-
+    if (auctions >= minItems){return;}
     if ((minItems - auctions) >= ItemsPerCycle)
         items = ItemsPerCycle;
     else
@@ -186,26 +167,25 @@ void AuctionHouseBot::addNewAuctions(Player *AHBplayer, AHBConfig *config)
         while (itemID == 0 && loopbreaker <= 50)
         {
             ++loopbreaker;
-            uint32 choice = urand(0, config->GetTotalWeights);
+            uint32 choice = (uint32)(rand_norm()*(double)config->GetTotalWeights);// urand(0, config->GetTotalWeights);
             pair<vector<uint32>, vector<uint32>> chosenItemType;
-            for (auto Class : classMap) {
+            bool breaker = false;
+            for (auto Class : config->GetClassMap) {
                 for (auto subclass : Class.second) {
                     for (auto quality : subclass.second) {
-                        if(choice < quality.second->)
-                    }
-                }
-            }
-            /*
-                        if (choice < quality.second.first.at(0)) {
-                            chosenItemType = quality.second;
+                        if (choice < quality.second->itemTypeConfig.at(0)) {
+                            itemID = quality.second->itemListing.at((uint32)(rand_norm()*(double)quality.second->itemListing.size()));
+                            breaker = true;
+                            break;
                         }
                         else {
-                            choice -= quality.second.first.at(0);
+                            choice -= quality.second->itemTypeConfig.at(0);
                         }
+                        if (breaker) break;
                     }
+                    if (breaker) break;
                 }
-            }
-*/
+                if (breaker) break;
             if (&chosenItemType != nullptr) {
                 itemID = chosenItemType.second.at(urand(0, chosenItemType.second.size()));
             }
