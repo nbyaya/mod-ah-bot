@@ -35,7 +35,7 @@ class WorldSession;
 #define AHB_PURPLE      4
 #define AHB_ORANGE      5
 #define AHB_YELLOW      6
-#define AHB_MAX_QUALITY 6
+#define AHB_8 6
 #define AHB_GREY_TG     0
 #define AHB_WHITE_TG    1
 #define AHB_GREEN_TG    2
@@ -90,38 +90,27 @@ public:
     void SetTotalWeights(uint32 value) { totalWeights = value; }
     uint32 calculateTotalWeights() {
         totalWeights = 0;
-        for (auto Class : classMap) {
-            for (auto subclass : Class.second) {
-                for (auto quality : subclass.second) {
-                    quality.second->itemTypeConfig.at(0);
+        for (uint32 i = 0; i < 16; i++) {
+            for (uint32 j = 0; j < 20; j++) {
+                for (uint32 k = 0; k < 8; k++) {
+                    try {
+                        if (classMap.at(i).at(j).at(k)->itemListing.size() < 1) {
+                            classMap.at(i).at(j).at(k)->itemTypeConfig[0] = 0;
+                        }
+                        totalWeights += classMap.at(i).at(j).at(k)->itemTypeConfig[0];
+                    }
+                    catch (out_of_range) { continue; }
                 }
             }
         }
+        return totalWeights;
     }
-    void LoadItem(uint32 Class, uint32 subClass, uint32 quality, uint32 itemID) {
-        unordered_map<uint32, unordered_map<uint32, qualityData*>> subclassMap;
+    bool LoadItem(uint32 Class, uint32 subClass, uint32 quality, uint32 itemID) {
         try {
-            subclassMap = classMap.at(Class);
+            classMap.at(Class).at(subClass).at(quality)->itemListing.push_back(itemID);
+            return true;
         }
-        catch (out_of_range) {
-            classMap.insert_or_assign(Class, subclassMap);
-        }
-        unordered_map<uint32, qualityData*> qualities;
-        try {
-            qualities = subclassMap.at(subClass);
-        }
-        catch (out_of_range) {
-            subclassMap.insert_or_assign(subClass, qualities);
-        }
-        qualityData* qd;
-        try {
-            qd = qualities.at(quality);
-        }
-        catch (out_of_range) {
-            qd = new qualityData();
-            qualities.insert_or_assign(quality, qd);
-        }
-        qd->itemListing.push_back(itemID);
+        catch (out_of_range) { return false; }
     }
     void SetMinItems(uint32 value) { minItems = value; }
     uint32 GetMinItems() { return minItems; }
@@ -130,6 +119,33 @@ public:
     uint32 IncrementItems() { return ++currentItems; }
     uint32 DecrementItems() { if (currentItems > 0)return --currentItems; return 0; }
     unordered_map < uint32, unordered_map<uint32, unordered_map<uint32, qualityData*>>>& GetClassMap() { return classMap ; }
+    qualityData* getQualityData(int Class, int subclass, int quality) { try { return classMap.at(Class).at(subclass).at(quality); } catch (out_of_range) { return nullptr; }; }
+    void insertSubclass(int Class, unordered_map<uint32, unordered_map<uint32, qualityData*>> subclass) { classMap.insert_or_assign(Class, subclass); }
+    void insertQuality(int Class, int subclass, unordered_map<uint32, qualityData*> quality) {
+        try { classMap.at(Class).insert_or_assign(subclass, quality); }
+        catch (out_of_range) {
+            sLog->outString("AHBotError: Class %u not in ClassMap", Class);
+        }
+    }
+    void insertQualityData(int Class, int subclass, int quality, int weight, int MinPrice, int MaxPrice, int Minbid, int Maxbid, int MaxStack, int BuyerPrice) {
+        try {
+            qualityData* qd = new qualityData;
+            qd->itemTypeConfig.push_back(weight);
+            qd->itemTypeConfig.push_back(MinPrice);
+            qd->itemTypeConfig.push_back(MaxPrice);
+            qd->itemTypeConfig.push_back(Minbid);
+            qd->itemTypeConfig.push_back(Maxbid);
+            qd->itemTypeConfig.push_back(MaxStack);
+            qd->itemTypeConfig.push_back(BuyerPrice);
+            classMap.at(Class).at(subclass).insert_or_assign(quality, qd);
+        }
+        catch (out_of_range) {
+            sLog->outString("AHBotError: Class %u subclass %u not in ClassMap", Class, subclass);
+        }
+    }
+    void insertItem(int Class, int subclass, int quality, int itemID) {
+        classMap.at(Class).at(subclass).at(quality)->itemListing.push_back(itemID);
+    }
     
     ~AHBConfig()
     {
@@ -165,6 +181,9 @@ private:
     bool Bind_When_Equipped;
     bool Bind_When_Use;
     bool Bind_Quest_Item;
+
+    bool DisableNoBuyPrice;
+    bool DisableNoSellPrice;
 
     bool DisablePermEnchant;
     bool DisableConjured;
