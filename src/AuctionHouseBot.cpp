@@ -33,6 +33,9 @@ using namespace std;
 vector<uint32> npcItems;
 vector<uint32> lootItems;
 bool debug_shou = true;
+#define MAX_CLASS = 16
+#define MAX_SUBCLASS = 20
+#define MAX_QUALITY = 6
 AuctionHouseBot::AuctionHouseBot()
 {
     debug_Out = false;
