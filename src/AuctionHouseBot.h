@@ -51,8 +51,16 @@ class WorldSession;
 #define AHB_ORANGE_I    12
 #define AHB_YELLOW_I    13
 
+
+class qualityData {
+public:
+    qualityData() { itemTypeConfig.clear(); itemListing.clear(); }
+    vector<uint32> itemTypeConfig;
+    vector<uint32> itemListing;
+};
 class AHBConfig
 {
+    
 private:
     uint32 AHID;
     uint32 AHFID;
@@ -61,10 +69,6 @@ private:
     uint32 buyerBidsPerInterval;
     uint32 biddingInterval;
     uint32 totalWeights;
-    struct qualityData{
-        vector<uint32> itemTypeConfig;
-        vector<uint32> itemListing;
-    };
     //classMap sorts Class : SubClass : Quality : qualityData
     unordered_map < uint32, unordered_map<uint32, unordered_map<uint32, qualityData*>>> classMap;
 public:
@@ -83,6 +87,7 @@ public:
     void SetBiddingInterval(uint32 value) { biddingInterval = value; }
     uint32 GetBiddingInterval() { return biddingInterval; }
     uint32 GetTotalWeights() { return totalWeights; }
+    void SetTotalWeights(uint32 value) { totalWeights = value; }
     uint32 calculateTotalWeights() {
         totalWeights = 0;
         for (auto Class : classMap) {
@@ -93,8 +98,35 @@ public:
             }
         }
     }
+    void LoadItem(uint32 Class, uint32 subClass, uint32 quality, uint32 itemID) {
+        unordered_map<uint32, unordered_map<uint32, qualityData*>> subclassMap;
+        try {
+            subclassMap = classMap.at(Class);
+        }
+        catch (out_of_range) {
+            classMap.insert_or_assign(Class, subclassMap);
+        }
+        unordered_map<uint32, qualityData*> qualities;
+        try {
+            qualities = subclassMap.at(subClass);
+        }
+        catch (out_of_range) {
+            subclassMap.insert_or_assign(subClass, qualities);
+        }
+        qualityData* qd;
+        try {
+            qd = qualities.at(quality);
+        }
+        catch (out_of_range) {
+            qd = new qualityData();
+            qualities.insert_or_assign(quality, qd);
+        }
+        qd->itemListing.push_back(itemID);
+    }
     void SetMinItems(uint32 value) { minItems = value; }
     uint32 GetMinItems() { return minItems; }
+    void SetCurrentItems(uint32 value) { currentItems = value; }
+    uint32 GetCurrentItems() { return currentItems; }
     uint32 IncrementItems() { return ++currentItems; }
     uint32 DecrementItems() { if (currentItems > 0)return --currentItems; return 0; }
     unordered_map < uint32, unordered_map<uint32, unordered_map<uint32, qualityData*>>>& GetClassMap() { return classMap ; }
@@ -202,6 +234,7 @@ public:
     ~AuctionHouseBot();
     void Update();
     void Initialize();
+    void loadItem(AHBConfig * config, ItemTemplate item);
     void InitializeConfiguration();
     void LoadValues(AHBConfig*);
     void DecrementItemCounts(AuctionEntry* ah, uint32 itemEntry);
