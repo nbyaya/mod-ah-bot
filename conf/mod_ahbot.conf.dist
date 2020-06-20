@@ -58,6 +58,14 @@ AuctionHouseBot.ItemsPerCycle = 200
 #        Include items that can be bought from vendors.
 #    Default 0 (False)
 #
+#    AuctionHouseBot.DisableNoBuyPrice
+#        Disables items with no buy price.
+#    Default 1 (True)
+#
+#    AuctionHouseBot.DisableNoSellPrice
+#        Disables items with no sell price.
+#    Default 1 (True)
+#
 #    AuctionHouseBot.VendorTradeGoods
 #        Include Trade Goods that can be bought from vendors.
 #    Default 0 (False)
@@ -132,6 +140,8 @@ AuctionHouseBot.ItemsPerCycle = 200
 #
 ###############################################################################
 
+AuctionHouseBot.DisableNoBuyPrice = 0
+AuctionHouseBot.DisableNoSellPrice = 0
 AuctionHouseBot.VendorItems = 0
 AuctionHouseBot.VendorTradeGoods = 0
 AuctionHouseBot.LootItems = 1
