@@ -11,12 +11,8 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
-
--- Dumping database structure for haven_dev_world
-CREATE DATABASE IF NOT EXISTS `haven_dev_world` /*!40100 DEFAULT CHARACTER SET latin1 */;
-USE `haven_dev_world`;
-
 -- Dumping structure for table haven_dev_world.mod_ah_bot_weight_table
+DROP TABLE IF EXISTS `mod_ah_bot_weight_table`;
 CREATE TABLE IF NOT EXISTS `mod_ah_bot_weight_table` (
   `Class` int(11) DEFAULT NULL,
   `Subclass` int(11) DEFAULT NULL,
@@ -1373,6 +1369,7 @@ REPLACE INTO `mod_ah_bot_weight_table` (`Class`, `Subclass`, `Quality`, `AHID`, 
 /*!40000 ALTER TABLE `mod_ah_bot_weight_table` ENABLE KEYS */;
 
 -- Dumping structure for table haven_dev_world.mod_auctionhousebot
+DROP TABLE IF EXISTS `mod_auctionhousebot`;
 CREATE TABLE IF NOT EXISTS `mod_auctionhousebot` (
   `auctionhouse` int(11) NOT NULL DEFAULT '0' COMMENT 'mapID of the auctionhouse.',
   `name` char(25) DEFAULT NULL COMMENT 'Text name of the auctionhouse.',
@@ -1391,6 +1388,7 @@ REPLACE INTO `mod_auctionhousebot` (`auctionhouse`, `name`, `minitems`, `buyerbi
 /*!40000 ALTER TABLE `mod_auctionhousebot` ENABLE KEYS */;
 
 -- Dumping structure for table haven_dev_world.mod_auctionhousebot_disabled_items
+DROP TABLE IF EXISTS `mod_auctionhousebot_disabled_items`;
 CREATE TABLE IF NOT EXISTS `mod_auctionhousebot_disabled_items` (
   `item` mediumint(8) unsigned NOT NULL,
   PRIMARY KEY (`item`)
