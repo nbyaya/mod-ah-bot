@@ -368,5 +368,5 @@ VALUES
 (54467), (50248), (50431), (52011), (52062), (54291), (54470);
 
 -- This adds any item with the deprecated flag (0x10) to the disabled item table as long as it isn't already in there.
-insert INTO acore_world.mod_auctionhousebot_disabled_items  (item) SELECT t.entry FROM acore_world.mod_auctionhousebot_disabled_items  AS d right JOIN acore_world.item_template t ON (d.item = t.entry) WHERE (Flags & 16) = 16 AND d.item IS NULL
+insert INTO acore_world.mod_auctionhousebot_disabled_items  (item) SELECT t.entry FROM acore_world.mod_auctionhousebot_disabled_items  AS d right JOIN acore_world.item_template t ON (d.item = t.entry) WHERE (Flags & 16) = 16 AND d.item IS NULL;
 
