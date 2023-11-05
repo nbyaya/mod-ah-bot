@@ -106,7 +106,7 @@ void AuctionHouseBot::AddNewAuctions(Player* AHBplayer, AHBConfig* config)
 
     LOG_DEBUG("module.ahbot", "AHSeller: {} items", items);
 
-    const auto itemIndex = sAHIndex;
+    auto const itemIndex = sAHIndex;
 
     // only insert a few at a time, so as not to peg the processor
     for (uint32 cnt = 1; cnt <= items; cnt++)
