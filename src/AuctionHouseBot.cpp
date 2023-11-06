@@ -255,7 +255,7 @@ void AuctionHouseBot::AddNewAuctionBuyerBotBid(std::shared_ptr<Player> player, s
         WithCallback(std::bind(&AuctionHouseBot::AddNewAuctionBuyerBotBidCallback, this, player, session, sharedConfig, std::placeholders::_1)));
 }
 
-void AuctionHouseBot::AddNewAuctionBuyerBotBidCallback(std::shared_ptr<Player> player, std::shared_ptr<WorldSession> session, std::shared_ptr<AHBConfig> config, QueryResult result)
+void AuctionHouseBot::AddNewAuctionBuyerBotBidCallback(std::shared_ptr<Player> player, std::shared_ptr<WorldSession> /*session*/, std::shared_ptr<AHBConfig> config, QueryResult result)
 {
     if (!result || !result->GetRowCount())
         return;
