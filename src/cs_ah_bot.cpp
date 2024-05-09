@@ -57,17 +57,17 @@ public:
         {
             if (strncmp(qualityName, "grey", maxCount) == 0)
                 return ITEM_QUALITY_POOR;
-            else if (strncmp(qualityName, "white", maxCount) == 0)
+            if (strncmp(qualityName, "white", maxCount) == 0)
                 return ITEM_QUALITY_NORMAL;
-            else if (strncmp(qualityName, "green", maxCount) == 0)
+            if (strncmp(qualityName, "green", maxCount) == 0)
                 return ITEM_QUALITY_UNCOMMON;
-            else if (strncmp(qualityName, "blue", maxCount) == 0)
+            if (strncmp(qualityName, "blue", maxCount) == 0)
                 return ITEM_QUALITY_RARE;
-            else if (strncmp(qualityName, "purple", maxCount) == 0)
+            if (strncmp(qualityName, "purple", maxCount) == 0)
                 return ITEM_QUALITY_EPIC;
-            else if (strncmp(qualityName, "orange", maxCount) == 0)
+            if (strncmp(qualityName, "orange", maxCount) == 0)
                 return ITEM_QUALITY_LEGENDARY;
-            else if (strncmp(qualityName, "yellow", maxCount) == 0)
+            if (strncmp(qualityName, "yellow", maxCount) == 0)
                 return ITEM_QUALITY_ARTIFACT;
 
             return static_cast<ItemQualities>(-1); // Invalid
