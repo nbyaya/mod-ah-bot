@@ -9,10 +9,17 @@
 #include "Player.h"
 #include "WorldSession.h"
 
+// =============================================================================
+// Initialization of the bot during the world startup
+// =============================================================================
+
 class AHBot_WorldScript : public WorldScript
 {
 public:
-    AHBot_WorldScript() : WorldScript("AHBot_WorldScript") { }
+    AHBot_WorldScript() : WorldScript("AHBot_WorldScript")
+    {
+
+    }
 
     void OnBeforeConfigLoad(bool /*reload*/) override
     {
@@ -26,40 +33,87 @@ public:
     }
 };
 
+// =============================================================================
+// Interaction with the auction house core mechanisms
+// =============================================================================
+
 class AHBot_AuctionHouseScript : public AuctionHouseScript
 {
 public:
-    AHBot_AuctionHouseScript() : AuctionHouseScript("AHBot_AuctionHouseScript") { }
+    AHBot_AuctionHouseScript() : AuctionHouseScript("AHBot_AuctionHouseScript")
+    {
 
-    void OnBeforeAuctionHouseMgrSendAuctionSuccessfulMail(AuctionHouseMgr* /*auctionHouseMgr*/, AuctionEntry* /*auction*/, Player* owner, uint32& /*owner_accId*/, uint32& /*profit*/, bool& sendNotification, bool& updateAchievementCriteria, bool& /*sendMail*/) override
+    }
+
+    void OnBeforeAuctionHouseMgrSendAuctionSuccessfulMail(
+        AuctionHouseMgr*,                /*auctionHouseMgr*/
+        AuctionEntry*,                   /*auction*/
+        Player* owner,
+        uint32&,                         /*owner_accId*/
+        uint32&,                         /*profit*/
+        bool& sendNotification,
+        bool& updateAchievementCriteria,
+        bool&                            /*sendMail*/) override
     {
         if (owner && owner->GetGUID().GetCounter() == auctionbot->GetAHBplayerGUID())
         {
-            sendNotification = false;
+            sendNotification          = false;
             updateAchievementCriteria = false;
         }
     }
 
-    void OnBeforeAuctionHouseMgrSendAuctionExpiredMail(AuctionHouseMgr* /*auctionHouseMgr*/, AuctionEntry* /*auction*/, Player* owner, uint32& /*owner_accId*/, bool& sendNotification, bool& /*sendMail*/) override
+    void OnBeforeAuctionHouseMgrSendAuctionExpiredMail(
+        AuctionHouseMgr*,       /* auctionHouseMgr */
+        AuctionEntry*,          /* auction */
+        Player* owner,
+        uint32&,                /* owner_accId */
+        bool& sendNotification,
+        bool&                   /* sendMail */) override
     {
         if (owner && owner->GetGUID().GetCounter() == auctionbot->GetAHBplayerGUID())
+        {
             sendNotification = false;
+        }
     }
 
-    void OnBeforeAuctionHouseMgrSendAuctionOutbiddedMail(AuctionHouseMgr* /*auctionHouseMgr*/, AuctionEntry* auction, Player* oldBidder, uint32& /*oldBidder_accId*/, Player* newBidder, uint32& newPrice, bool& /*sendNotification*/, bool& /*sendMail*/) override
+    void OnBeforeAuctionHouseMgrSendAuctionOutbiddedMail(
+        AuctionHouseMgr*,      /* auctionHouseMgr */
+        AuctionEntry* auction,
+        Player* oldBidder,
+        uint32&,               /* oldBidder_accId */
+        Player* newBidder,
+        uint32& newPrice,
+        bool&,                 /* sendNotification */
+        bool&                  /* sendMail */) override
     {
         if (oldBidder && !newBidder)
-            oldBidder->GetSession()->SendAuctionBidderNotification(auction->GetHouseId(), auction->Id, ObjectGuid::Create<HighGuid::Player>(auctionbot->GetAHBplayerGUID()), newPrice, auction->GetAuctionOutBid(), auction->item_template);
+        {
+            oldBidder->GetSession()->SendAuctionBidderNotification(
+                auction->GetHouseId(),
+                auction->Id,
+                ObjectGuid::Create<HighGuid::Player>(auctionbot->GetAHBplayerGUID()),
+                newPrice,
+                auction->GetAuctionOutBid(),
+                auction->item_template);
+        }
     }
 
     void OnAuctionAdd(AuctionHouseObject* /*ah*/, AuctionEntry* auction) override
     {
+        //
+        // Keeps updated the amount of items in the auction
+        //
+
         auctionbot->IncrementItemCounts(auction);
     }
 
     void OnAuctionRemove(AuctionHouseObject* /*ah*/, AuctionEntry* auction) override
     {
-        auctionbot->DecrementItemCounts(auction, auction->item_template);
+        //
+        // Keeps updated the amount of items in the auction
+        //
+
+        auctionbot->DecrementItemCounts(auction);
     }
 
     void OnBeforeAuctionHouseMgrUpdate() override
@@ -68,21 +122,47 @@ public:
     }
 };
 
+// =============================================================================
+// Interaction with the mailing systems
+// =============================================================================
+
 class AHBot_MailScript : public MailScript
 {
 public:
-    AHBot_MailScript() : MailScript("AHBot_MailScript") { }
-
-    void OnBeforeMailDraftSendMailTo(MailDraft* /*mailDraft*/, MailReceiver const& receiver, MailSender const& sender, MailCheckMask& /*checked*/, uint32& /*deliver_delay*/, uint32& /*custom_expiration*/, bool& deleteMailItemsFromDB, bool& sendMail) override
+    AHBot_MailScript() : MailScript("AHBot_MailScript")
     {
+
+    }
+
+    void OnBeforeMailDraftSendMailTo(
+        MailDraft*,                  /* mailDraft */
+        MailReceiver const& receiver,
+        MailSender const& sender,
+        MailCheckMask&,              /* checked */
+        uint32&,                     /* deliver_delay */
+        uint32&,                     /* custom_expiration */
+        bool& deleteMailItemsFromDB,
+        bool& sendMail) override
+    {
+        //
+        // If the mail is for the bot, then remove it and delete the items bought
+        //
+
         if (receiver.GetPlayerGUIDLow() == auctionbot->GetAHBplayerGUID())
         {
-            if (sender.GetMailMessageType() == MAIL_AUCTION)        // auction mail with items
+            if (sender.GetMailMessageType() == MAIL_AUCTION)
+            {
                 deleteMailItemsFromDB = true;
+            }
+
             sendMail = false;
         }
     }
 };
+
+// =============================================================================
+// Module startup
+// =============================================================================
 
 void AddAHBotScripts()
 {
