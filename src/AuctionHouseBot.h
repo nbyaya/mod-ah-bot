@@ -27,8 +27,8 @@
 #include "AuctionHouseBotConfig.h"
 
 struct AuctionEntry;
-class Player;
-class WorldSession;
+class  Player;
+class  WorldSession;
 
 class AuctionHouseBot
 {

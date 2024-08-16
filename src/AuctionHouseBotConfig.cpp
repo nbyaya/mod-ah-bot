@@ -51,7 +51,7 @@ AHBConfig::AHBConfig(uint32 ahid)
         break;
 
     default:
-        AHFID = 120; // Alliance
+        AHFID = 120; // Neutral
         break;
     }
 }
@@ -1044,6 +1044,7 @@ uint32 AHBConfig::GetMaxStack(uint32 color)
         return 0;
     }
 }
+
 void AHBConfig::SetBuyerPrice(uint32 color, uint32 value)
 {
     switch (color)

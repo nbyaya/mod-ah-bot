@@ -193,20 +193,29 @@ uint32 AuctionHouseBot::getStackCount(uint32 max)
 
     if (DivisibleStacks)
     {
+        uint32 ret = 0;
+
         if (max % 5 == 0) // 5, 10, 15, 20
         {
-            return urand(1, 4) * 5;
+            ret = urand(1, 4) * 5;
         }
 
         if (max % 4 == 0) // 4, 8, 12, 16
         {
-            return urand(1, 4) * 4;
+            ret = urand(1, 4) * 4;
         }
 
         if (max % 3 == 0) // 3, 6, 9
         {
-            return urand(1, 3) * 3;
+            ret = urand(1, 3) * 3;
         }
+
+        if (ret > max)
+        {
+            ret = max;
+        }
+
+        return ret;
     }
 
     // 
