@@ -195,7 +195,7 @@ uint32 AuctionHouseBot::getStackCount(uint32 max)
     {
         if (max % 5 == 0) // 5, 10, 15, 20
         {
-            return urand(1, 5) * 5;
+            return urand(1, 4) * 5;
         }
 
         if (max % 4 == 0) // 4, 8, 12, 16
@@ -203,7 +203,7 @@ uint32 AuctionHouseBot::getStackCount(uint32 max)
             return urand(1, 4) * 4;
         }
 
-        if (max % 3 == 0) // 3, 6, 9, 18
+        if (max % 3 == 0) // 3, 6, 9
         {
             return urand(1, 3) * 3;
         }
