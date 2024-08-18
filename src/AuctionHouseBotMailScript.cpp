@@ -1,4 +1,5 @@
 #include "AuctionHouseBot.h"
+#include "AuctionHouseBotCommon.h"
 #include "AuctionHouseBotMailScript.h"
 
 AHBot_MailScript::AHBot_MailScript() : MailScript("AHBot_MailScript")
@@ -20,7 +21,7 @@ void AHBot_MailScript::OnBeforeMailDraftSendMailTo(
     // If the mail is for the bot, then remove it and delete the items bought
     //
 
-    if (receiver.GetPlayerGUIDLow() == auctionbot->GetAHBplayerGUID())
+    if (gBotsId.find(receiver.GetPlayerGUIDLow()) != gBotsId.end())
     {
         if (sender.GetMailMessageType() == MAIL_AUCTION)
         {

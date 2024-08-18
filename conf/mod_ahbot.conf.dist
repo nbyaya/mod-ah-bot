@@ -27,6 +27,10 @@
 #        Enable/Disable tracing for the sold items
 #    Default 0 (disabled)
 #
+#    AuctionHouseBot.TRACE_BUYER
+#        Enable/Disable tracing for the bought items
+#    Default 0 (disabled)
+#
 #    AuctionHouseBot.EnableSeller
 #        Enable/Disable the part of AHBot that puts items up for auction
 #    Default 0 (disabled)
@@ -86,6 +90,8 @@ AuctionHouseBot.DEBUG_FILTERS = 0
 AuctionHouseBot.DEBUG_BUYER = 0
 AuctionHouseBot.DEBUG_SELLER = 0
 AuctionHouseBot.TRACE_SELLER = 0
+AuctionHouseBot.TRACE_BUYER = 0
+
 AuctionHouseBot.EnableSeller = 0
 AuctionHouseBot.EnableBuyer = 0
 AuctionHouseBot.UseBuyPriceForSeller = 0

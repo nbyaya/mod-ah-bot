@@ -20,11 +20,16 @@
 #ifndef AUCTION_HOUSE_BOT_CONFIG_H
 #define AUCTION_HOUSE_BOT_CONFIG_H
 
+#include <set>
+#include <string>
+
+#include "ObjectMgr.h"
+
 class AHBConfig
 {
 private:
-    uint32 AHID;
-    uint32 AHFID;
+    uint32 AHID;                     // Id
+    uint32 AHFID;                    // Faction id
 
     uint32 minItems;
     uint32 maxItems;
@@ -97,21 +102,29 @@ private:
     uint32 buyerBiddingInterval;
     uint32 buyerBidsPerInterval;
 
-    uint32 greytgp;    // Contains the amount of items to be sold in absolute values
-    uint32 whitetgp;   // Contains the amount of items to be sold in absolute values
-    uint32 greentgp;   // Contains the amount of items to be sold in absolute values
-    uint32 bluetgp;    // Contains the amount of items to be sold in absolute values
-    uint32 purpletgp;  // Contains the amount of items to be sold in absolute values
-    uint32 orangetgp;  // Contains the amount of items to be sold in absolute values
-    uint32 yellowtgp;  // Contains the amount of items to be sold in absolute values
+    //
+    // Amount of items to be sold in absolute values
+    //
 
-    uint32 greyip;     // Contains the amount of items to be sold in absolute values
-    uint32 whiteip;    // Contains the amount of items to be sold in absolute values
-    uint32 greenip;    // Contains the amount of items to be sold in absolute values
-    uint32 blueip;     // Contains the amount of items to be sold in absolute values
-    uint32 purpleip;   // Contains the amount of items to be sold in absolute values
-    uint32 orangeip;   // Contains the amount of items to be sold in absolute values
-    uint32 yellowip;   // Contains the amount of items to be sold in absolute values
+    uint32 greytgp;
+    uint32 whitetgp;
+    uint32 greentgp;
+    uint32 bluetgp;
+    uint32 purpletgp;
+    uint32 orangetgp;
+    uint32 yellowtgp;
+
+    uint32 greyip;
+    uint32 whiteip;
+    uint32 greenip;
+    uint32 blueip;
+    uint32 purpleip;
+    uint32 orangeip;
+    uint32 yellowip;
+
+    //
+    // Situation of the auction house
+    //
 
     uint32 greyTGoods;
     uint32 whiteTGoods;
@@ -129,11 +142,155 @@ private:
     uint32 orangeItems;
     uint32 yellowItems;
 
+    void   InitializeFromFile();
+    void   InitializeFromSql(std::set<uint32> botsIds);
+
+    std::set<uint32> getCommaSeparatedIntegers(std::string text);
+
 public:
+    //
+    // Debugging
+    //
+
+    bool   DebugOut;
+    bool   DebugOutConfig;
+    bool   DebugOutFilters;
+    bool   DebugOutBuyer;
+    bool   DebugOutSeller;
+
+    //
+    // Tracing
+    //
+
+    bool   TraceSeller;
+    bool   TraceBuyer;
+
+    //
+    // Setup
+    //
+
+    bool   AHBSeller;
+    bool   AHBBuyer;
+    bool   BuyMethod;
+    bool   SellMethod;
+    bool   ConsiderOnlyBotAuctions;
+    uint32 ItemsPerCycle;
+
+    //
+    // Filters
+    //
+
+    bool   Vendor_Items;
+    bool   Loot_Items;
+    bool   Other_Items;
+    bool   Vendor_TGs;
+    bool   Loot_TGs;
+    bool   Other_TGs;
+
+    bool   No_Bind;
+    bool   Bind_When_Picked_Up;
+    bool   Bind_When_Equipped;
+    bool   Bind_When_Use;
+    bool   Bind_Quest_Item;
+
+    uint32 DuplicatesCount;
+    uint32 ElapsingTimeClass;
+
+    bool   DivisibleStacks;
+    bool   DisablePermEnchant;
+    bool   DisableConjured;
+    bool   DisableGems;
+    bool   DisableMoney;
+    bool   DisableMoneyLoot;
+    bool   DisableLootable;
+    bool   DisableKeys;
+    bool   DisableDuration;
+    bool   DisableBOP_Or_Quest_NoReqLevel;
+
+    bool   DisableWarriorItems;
+    bool   DisablePaladinItems;
+    bool   DisableHunterItems;
+    bool   DisableRogueItems;
+    bool   DisablePriestItems;
+    bool   DisableDKItems;
+    bool   DisableShamanItems;
+    bool   DisableMageItems;
+    bool   DisableWarlockItems;
+    bool   DisableUnusedClassItems;
+    bool   DisableDruidItems;
+
+    uint32 DisableItemsBelowLevel;
+    uint32 DisableItemsAboveLevel;
+
+    uint32 DisableTGsBelowLevel;
+    uint32 DisableTGsAboveLevel;
+
+    uint32 DisableItemsBelowGUID;
+    uint32 DisableItemsAboveGUID;
+
+    uint32 DisableTGsBelowGUID;
+    uint32 DisableTGsAboveGUID;
+
+    uint32 DisableItemsBelowReqLevel;
+    uint32 DisableItemsAboveReqLevel;
+
+    uint32 DisableTGsBelowReqLevel;
+    uint32 DisableTGsAboveReqLevel;
+
+    uint32 DisableItemsBelowReqSkillRank;
+    uint32 DisableItemsAboveReqSkillRank;
+
+    uint32 DisableTGsBelowReqSkillRank;
+    uint32 DisableTGsAboveReqSkillRank;
+
+    //
+    // Items validity for selling purposes
+    //
+
+    std::set<uint32> NpcItems;
+    std::set<uint32> LootItems;
+    std::set<uint32> DisableItemStore;
+    std::set<uint32> SellerWhiteList;
+
+    //
+    // Bins for trade goods.
+    //
+
+    std::set<uint32> GreyTradeGoodsBin;
+    std::set<uint32> WhiteTradeGoodsBin;
+    std::set<uint32> GreenTradeGoodsBin;
+    std::set<uint32> BlueTradeGoodsBin;
+    std::set<uint32> PurpleTradeGoodsBin;
+    std::set<uint32> OrangeTradeGoodsBin;
+    std::set<uint32> YellowTradeGoodsBin;
+
+    //
+    // Bins for items
+    //
+
+    std::set<uint32> GreyItemsBin;
+    std::set<uint32> WhiteItemsBin;
+    std::set<uint32> GreenItemsBin;
+    std::set<uint32> BlueItemsBin;
+    std::set<uint32> PurpleItemsBin;
+    std::set<uint32> OrangeItemsBin;
+    std::set<uint32> YellowItemsBin;
+
+    //
+    // Constructors/destructors
+    //
+
+    AHBConfig(uint32 ahid, AHBConfig* conf);
     AHBConfig(uint32 ahid);
     AHBConfig();
     ~AHBConfig();
 
+    //
+    // Ruotines
+    //
+
+    void   Initialize(std::set<uint32> botsIds);
+    void   InitializeBins();
     void   Reset();
 
     uint32 GetAHID();
@@ -145,21 +302,8 @@ public:
     void   SetMaxItems       (uint32 value);
     uint32 GetMaxItems       ();
 
-    void   SetPercentages(
-        uint32 greytg,
-        uint32 whitetg,
-        uint32 greentg,
-        uint32 bluetg,
-        uint32 purpletg,
-        uint32 orangetg,
-        uint32 yellowtg,
-        uint32 greyi,
-        uint32 whitei,
-        uint32 greeni,
-        uint32 bluei,
-        uint32 purplei,
-        uint32 orangei,
-        uint32 yellowi);
+    void   SetPercentages    (uint32 greytg, uint32 whitetg, uint32 greentg, uint32 bluetg, uint32 purpletg, uint32 orangetg, uint32 yellowtg,
+                              uint32 greyi , uint32 whitei , uint32 greeni , uint32 bluei , uint32 purplei , uint32 orangei , uint32 yellowi);
     uint32 GetPercentages    (uint32 color);
 
     void   SetMinPrice       (uint32 color, uint32 value);
@@ -201,5 +345,12 @@ public:
     uint32 GetItemCounts     (uint32 color);
 };
 
+//
+// Globally defined configurations
+//
+
+extern AHBConfig* gAllianceConfig;
+extern AHBConfig* gHordeConfig;
+extern AHBConfig* gNeutralConfig;
 
 #endif // AUCTION_HOUSE_BOT_CONFIG_H

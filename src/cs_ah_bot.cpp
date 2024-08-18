@@ -124,7 +124,11 @@ public:
                 return false;
             }
 
-            auctionbot->Commands(AHBotCommand::buyer, 0, 0, param1);
+            for (AuctionHouseBot* bot: gBots)
+            {
+                bot->Commands(AHBotCommand::buyer, 0, 0, param1);
+            }
+
             return true;
         }
         else if (strncmp(opt, "seller", l) == 0)
@@ -137,7 +141,11 @@ public:
                 return false;
             }
 
-            auctionbot->Commands(AHBotCommand::seller, 0, 0, param1);
+            for (AuctionHouseBot* bot: gBots)
+            {
+                bot->Commands(AHBotCommand::seller, 0, 0, param1);
+            }
+
             return true;
         }
 
@@ -207,7 +215,10 @@ public:
                 return false;
             }
 
-            auctionbot->Commands(AHBotCommand::ahexpire, ahMapID, 0, NULL);
+            for (AuctionHouseBot* bot: gBots)
+            {
+                bot->Commands(AHBotCommand::ahexpire, ahMapID, 0, NULL);
+            }
         }
         else if (strncmp(opt, "minitems", l) == 0)
         {
@@ -219,7 +230,10 @@ public:
                 return false;
             }
 
-            auctionbot->Commands(AHBotCommand::minitems, ahMapID, 0, param1);
+            for (AuctionHouseBot* bot: gBots)
+            {
+                bot->Commands(AHBotCommand::minitems, ahMapID, 0, param1);
+            }
         }
         else if (strncmp(opt, "maxitems", l) == 0)
         {
@@ -231,7 +245,10 @@ public:
                 return false;
             }
 
-            auctionbot->Commands(AHBotCommand::maxitems, ahMapID, 0, param1);
+            for (AuctionHouseBot* bot: gBots)
+            {
+                bot->Commands(AHBotCommand::maxitems, ahMapID, 0, param1);
+            }
         }
         else if (strncmp(opt, "percentages", l) == 0)
         {
@@ -314,7 +331,10 @@ public:
             strcat(param, " ");
             strcat(param, param14);
 
-            auctionbot->Commands(AHBotCommand::percentages, ahMapID, 0, param);
+            for (AuctionHouseBot* bot: gBots)
+            {
+                bot->Commands(AHBotCommand::percentages, ahMapID, 0, param);
+            }
         }
         else if (strncmp(opt, "minprice", l) == 0)
         {
@@ -331,7 +351,10 @@ public:
 
             if (quality != static_cast<ItemQualities>(-1))
             {
-                auctionbot->Commands(AHBotCommand::minprice, ahMapID, quality, param2);
+                for (AuctionHouseBot* bot: gBots)
+                {
+                    bot->Commands(AHBotCommand::minprice, ahMapID, quality, param2);
+                }
             }
             else
             {
@@ -354,7 +377,10 @@ public:
 
             if (quality != static_cast<ItemQualities>(-1))
             {
-                auctionbot->Commands(AHBotCommand::maxprice, ahMapID, quality, param2);
+                for (AuctionHouseBot* bot: gBots)
+                {
+                    bot->Commands(AHBotCommand::maxprice, ahMapID, quality, param2);
+                }
             }
             else
             {
@@ -385,7 +411,10 @@ public:
 
             if (quality != static_cast<ItemQualities>(-1))
             {
-                auctionbot->Commands(AHBotCommand::minbidprice, ahMapID, quality, param2);
+                for (AuctionHouseBot* bot: gBots)
+                {
+                    bot->Commands(AHBotCommand::minbidprice, ahMapID, quality, param2);
+                }
             }
             else
             {
@@ -416,7 +445,10 @@ public:
 
             if (quality != static_cast<ItemQualities>(-1))
             {
-                auctionbot->Commands(AHBotCommand::maxbidprice, ahMapID, quality, param2);
+                for (AuctionHouseBot* bot: gBots)
+                {
+                    bot->Commands(AHBotCommand::maxbidprice, ahMapID, quality, param2);
+                }
             }
             else
             {
@@ -446,7 +478,10 @@ public:
 
             if (quality != static_cast<ItemQualities>(-1))
             {
-                auctionbot->Commands(AHBotCommand::maxstack, ahMapID, quality, param2);
+                for (AuctionHouseBot* bot: gBots)
+                {
+                    bot->Commands(AHBotCommand::maxstack, ahMapID, quality, param2);
+                }
             }
             else
             {
@@ -469,7 +504,10 @@ public:
 
             if (quality != static_cast<ItemQualities>(-1))
             {
-                auctionbot->Commands(AHBotCommand::buyerprice, ahMapID, quality, param2);
+                for (AuctionHouseBot* bot: gBots)
+                {
+                    bot->Commands(AHBotCommand::buyerprice, ahMapID, quality, param2);
+                }
             }
             else
             {
@@ -487,7 +525,10 @@ public:
                 return false;
             }
 
-            auctionbot->Commands(AHBotCommand::bidinterval, ahMapID, 0, param1);
+            for (AuctionHouseBot* bot: gBots)
+            {
+                bot->Commands(AHBotCommand::bidinterval, ahMapID, 0, param1);
+            }
         }
         else if (strncmp(opt, "bidsperinterval", l) == 0)
         {
@@ -499,7 +540,10 @@ public:
                 return false;
             }
 
-            auctionbot->Commands(AHBotCommand::bidsperinterval, ahMapID, 0, param1);
+            for (AuctionHouseBot* bot: gBots)
+            {
+                bot->Commands(AHBotCommand::bidsperinterval, ahMapID, 0, param1);
+            }
         }
         else
         {

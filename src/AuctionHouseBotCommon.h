@@ -20,7 +20,11 @@
 #ifndef AUCTION_HOUSE_BOT_COMMON_H
 #define AUCTION_HOUSE_BOT_COMMON_H
 
-#include "Log.h"
+#include <set>
+
+#include "Common.h"
+
+class AuctionHouseBot;
 
 //
 // Item quality
@@ -89,5 +93,12 @@ enum class AHBotCommand : uint32
     bidinterval,
     bidsperinterval
 };
+
+//
+// Globals
+//
+
+extern std::set<uint32>           gBotsId; // Active bots players ids
+extern std::set<AuctionHouseBot*> gBots;   // Active bots
 
 #endif // AUCTION_HOUSE_BOT_COMMON_H
