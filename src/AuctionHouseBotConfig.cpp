@@ -1949,6 +1949,7 @@ void AHBConfig::Initialize(std::set<uint32> botsIds)
 {
     InitializeFromFile();
     InitializeFromSql(botsIds);
+    InitializeBins();
 }
 
 void AHBConfig::InitializeFromFile()
@@ -3259,13 +3260,14 @@ void AHBConfig::InitializeBins()
     // Perform reporting and the last check: if no items are disabled or in the whitelist clear the bin making the selling useless
     // 
 
-    LOG_INFO("module", "Configuration for ah {}", AHID);
+    LOG_INFO("module", "===== AHBot ====================");
+    LOG_INFO("module", "AHBot: Configuration for ah {}", AHID);
 
     if (SellerWhiteList.size() == 0)
     {
         if (DisableItemStore.size() == 0)
         {
-            LOG_ERROR("module", "No items are disabled or in the whitelist! Selling will be disabled!");
+            LOG_ERROR("module", "AHBot: No items are disabled or in the whitelist! Selling will be disabled!");
 
             GreyTradeGoodsBin.clear();
             WhiteTradeGoodsBin.clear();
@@ -3287,30 +3289,27 @@ void AHBConfig::InitializeBins()
             return;
         }
 
-        LOG_INFO("module", "{} disabled items", uint32(DisableItemStore.size()));
+        LOG_INFO("module", "AHBot: {} disabled items", uint32(DisableItemStore.size()));
     }
     else
     {
-        LOG_INFO("module", "Using a whitelist of {} items", uint32(SellerWhiteList.size()));
+        LOG_INFO("module", "AHBot: Using a whitelist of {} items", uint32(SellerWhiteList.size()));
     }
 
-    // if (DebugOutConfig)
-    // {
-        LOG_INFO("module", "loaded {} grey   trade goods", uint32(GreyTradeGoodsBin.size()));
-        LOG_INFO("module", "loaded {} white  trade goods", uint32(WhiteTradeGoodsBin.size()));
-        LOG_INFO("module", "loaded {} green  trade goods", uint32(GreenTradeGoodsBin.size()));
-        LOG_INFO("module", "loaded {} blue   trade goods", uint32(BlueTradeGoodsBin.size()));
-        LOG_INFO("module", "loaded {} purple trade goods", uint32(PurpleTradeGoodsBin.size()));
-        LOG_INFO("module", "loaded {} orange trade goods", uint32(OrangeTradeGoodsBin.size()));
-        LOG_INFO("module", "loaded {} yellow trade goods", uint32(YellowTradeGoodsBin.size()));
-        LOG_INFO("module", "loaded {} grey   items"      , uint32(GreyItemsBin.size()));
-        LOG_INFO("module", "loaded {} white  items"      , uint32(WhiteItemsBin.size()));
-        LOG_INFO("module", "loaded {} green  items"      , uint32(GreenItemsBin.size()));
-        LOG_INFO("module", "loaded {} blue   items"      , uint32(BlueItemsBin.size()));
-        LOG_INFO("module", "loaded {} purple items"      , uint32(PurpleItemsBin.size()));
-        LOG_INFO("module", "loaded {} orange items"      , uint32(OrangeItemsBin.size()));
-        LOG_INFO("module", "loaded {} yellow items"      , uint32(YellowItemsBin.size()));
-    // }
+    LOG_INFO("module", "AHBot: loaded {} grey   trade goods", uint32(GreyTradeGoodsBin.size()));
+    LOG_INFO("module", "AHBot: loaded {} white  trade goods", uint32(WhiteTradeGoodsBin.size()));
+    LOG_INFO("module", "AHBot: loaded {} green  trade goods", uint32(GreenTradeGoodsBin.size()));
+    LOG_INFO("module", "AHBot: loaded {} blue   trade goods", uint32(BlueTradeGoodsBin.size()));
+    LOG_INFO("module", "AHBot: loaded {} purple trade goods", uint32(PurpleTradeGoodsBin.size()));
+    LOG_INFO("module", "AHBot: loaded {} orange trade goods", uint32(OrangeTradeGoodsBin.size()));
+    LOG_INFO("module", "AHBot: loaded {} yellow trade goods", uint32(YellowTradeGoodsBin.size()));
+    LOG_INFO("module", "AHBot: loaded {} grey   items"      , uint32(GreyItemsBin.size()));
+    LOG_INFO("module", "AHBot: loaded {} white  items"      , uint32(WhiteItemsBin.size()));
+    LOG_INFO("module", "AHBot: loaded {} green  items"      , uint32(GreenItemsBin.size()));
+    LOG_INFO("module", "AHBot: loaded {} blue   items"      , uint32(BlueItemsBin.size()));
+    LOG_INFO("module", "AHBot: loaded {} purple items"      , uint32(PurpleItemsBin.size()));
+    LOG_INFO("module", "AHBot: loaded {} orange items"      , uint32(OrangeItemsBin.size()));
+    LOG_INFO("module", "AHBot: loaded {} yellow items"      , uint32(YellowItemsBin.size()));
 }
 
 std::set<uint32> AHBConfig::getCommaSeparatedIntegers(std::string text)

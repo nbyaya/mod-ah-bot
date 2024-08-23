@@ -1,3 +1,7 @@
+/*
+ * Copyright (C) 2016+ AzerothCore <www.azerothcore.org>, released under GNU AGPL v3 license: https://github.com/azerothcore/azerothcore-wotlk/blob/master/LICENSE-AGPL3
+ */
+
 #include "Config.h"
 #include "Log.h"
 
@@ -84,14 +88,6 @@ void AHBot_WorldScript::OnBeforeConfigLoad(bool /*reload*/)
         LOG_ERROR("server.loading", "AHBot: no characters registered for account {}", account);
         return;
     }
-
-    //
-    // Preparare the global configuration for all factions using the configuration just read
-    //
-
-    gAllianceConfig->Initialize(gBotsId);
-    gHordeConfig->Initialize   (gBotsId);
-    gNeutralConfig->Initialize (gBotsId);
 }
 
 void AHBot_WorldScript::OnStartup()
@@ -99,12 +95,12 @@ void AHBot_WorldScript::OnStartup()
     LOG_INFO("server.loading", "Initialize AuctionHouseBot...");
 
     //
-    // Initialize the configuration items bins here, when items has been handled by the object manager
+    // Initialize the configuration
     //
 
-    gAllianceConfig->InitializeBins();
-    gHordeConfig->InitializeBins   ();
-    gNeutralConfig->InitializeBins ();
+    gAllianceConfig->Initialize(gBotsId);
+    gHordeConfig->Initialize   (gBotsId);
+    gNeutralConfig->Initialize (gBotsId);
 
     //
     // Starts the amount of bots read furing the configuration phase
