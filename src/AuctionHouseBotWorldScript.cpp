@@ -18,7 +18,7 @@ AHBot_WorldScript::AHBot_WorldScript() : WorldScript("AHBot_WorldScript")
 
 }
 
-void AHBot_WorldScript::OnBeforeConfigLoad(bool /*reload*/)
+void AHBot_WorldScript::OnBeforeConfigLoad(bool reload)
 {
     //
     // Retrieve how many bots shall be operating on the auction market
@@ -88,6 +88,38 @@ void AHBot_WorldScript::OnBeforeConfigLoad(bool /*reload*/)
         LOG_ERROR("server.loading", "AHBot: no characters registered for account {}", account);
         return;
     }
+
+    // 
+    // Start the bots only if the operation is a reload, otherwise let the OnStartup do the job
+    // 
+
+    if (reload)
+    {
+        if (debug)
+        {
+            LOG_INFO("module", "AHBot: Reloading the bots");
+        }
+
+        //
+        // Clear the bots array; this way they wont be used anymore during the initialization stage.
+        //
+
+        DeleteBots();
+
+        //
+        // Reload the configuration for the auction houses
+        //
+
+        gAllianceConfig->Initialize(gBotsId);
+        gHordeConfig->Initialize   (gBotsId);
+        gNeutralConfig->Initialize (gBotsId);
+
+        //
+        // Start again the bots
+        //
+
+        PopulateBots();
+    }
 }
 
 void AHBot_WorldScript::OnStartup()
@@ -95,7 +127,7 @@ void AHBot_WorldScript::OnStartup()
     LOG_INFO("server.loading", "Initialize AuctionHouseBot...");
 
     //
-    // Initialize the configuration
+    // Initialize the configuration (done only once at startup)
     //
 
     gAllianceConfig->Initialize(gBotsId);
@@ -103,10 +135,51 @@ void AHBot_WorldScript::OnStartup()
     gNeutralConfig->Initialize (gBotsId);
 
     //
-    // Starts the amount of bots read furing the configuration phase
+    // Starts the bots
     //
 
+    PopulateBots();
+}
+
+void AHBot_WorldScript::DeleteBots()
+{
+    // 
+    // Save the old bots references.
+    // 
+
+    std::set<AuctionHouseBot*> oldBots;
+
+    for (AuctionHouseBot* bot: gBots)
+    {
+        oldBots.insert(bot);
+    }
+
+    //
+    // Clear the bot list
+    //
+
+    gBots.clear();
+
+    // 
+    // Free the resources used up by the old bots
+    // 
+
+    for (AuctionHouseBot* bot: oldBots)
+    {
+        delete bot;
+    }
+}
+
+
+void AHBot_WorldScript::PopulateBots()
+{
     uint32 account = sConfigMgr->GetOption<uint32>("AuctionHouseBot.Account", 0);
+
+    // 
+    // Insert the bot in the list used for auction house iterations
+    // 
+
+    gBots.clear();
 
     for (uint32 id: gBotsId)
     {

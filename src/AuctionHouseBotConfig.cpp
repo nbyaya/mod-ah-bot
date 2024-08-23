@@ -3260,7 +3260,6 @@ void AHBConfig::InitializeBins()
     // Perform reporting and the last check: if no items are disabled or in the whitelist clear the bin making the selling useless
     // 
 
-    LOG_INFO("module", "===== AHBot ====================");
     LOG_INFO("module", "AHBot: Configuration for ah {}", AHID);
 
     if (SellerWhiteList.size() == 0)

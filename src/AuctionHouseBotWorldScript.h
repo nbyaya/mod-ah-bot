@@ -13,6 +13,10 @@
 
 class AHBot_WorldScript : public WorldScript
 {
+private:
+    void DeleteBots();
+    void PopulateBots();
+
 public:
     AHBot_WorldScript();
 
