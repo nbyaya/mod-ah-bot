@@ -62,6 +62,8 @@
 #    AuctionHouseBot.ConsiderOnlyBotAuctions
 #        Ignore player auctions and consider only bot ones when keeping track of the numer of auctions in place.
 #        This allow to keep a background noise in the market even when lot of players are in.
+#        If this is not set, players acutions are counted in the valid auctions and you will need to greatly increase the maxitems SQL values to
+#        allow the bot to operate on the market. If this is set the players auctions will not be considered.
 #    Default 0 (False)
 #
 #    AuctionHouseBot.DuplicatesCount
