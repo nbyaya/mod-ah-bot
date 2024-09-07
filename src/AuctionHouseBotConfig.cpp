@@ -1974,12 +1974,11 @@ void AHBConfig::UpdateItemStats(uint32 id, uint32 stackSize, uint64 buyout)
         itemsCount[id]++;
 
         //
-        // Reset the statistics at about every 100 buyout to force adapt to the market price
-        // This can cause spikes if this auction in particular is unbalanced, but adds
-        // some movement into the market that can make it an interesting opportunity.
+        // Reset the statistics to force adapt to the market price.
+        // Adds a little of randomness by adding/removing a range of 9 to the threshold.
         //
 
-        if (itemsCount[id] > 100 + (urand(1, 19) - 10))
+        if (itemsCount[id] > MarketResetThreshold + (urand(1, 19) - 10))
         {
             itemsCount[id] = 1;
             itemsSum[id]   = perUnit;
@@ -2040,6 +2039,7 @@ void AHBConfig::InitializeFromFile()
     SellMethod                     = sConfigMgr->GetOption<bool>  ("AuctionHouseBot.UseBuyPriceForSeller"   , false);
     BuyMethod                      = sConfigMgr->GetOption<bool>  ("AuctionHouseBot.UseBuyPriceForBuyer"    , false);
     SellAtMarketPrice              = sConfigMgr->GetOption<bool>  ("AuctionHouseBot.UseMarketPriceForSeller", false);
+    MarketResetThreshold           = sConfigMgr->GetOption<uint32>("AuctionHouseBot.MarketResetThreshold"   , 25);
     DuplicatesCount                = sConfigMgr->GetOption<uint32>("AuctionHouseBot.DuplicatesCount"        , 0);
     DivisibleStacks                = sConfigMgr->GetOption<bool>  ("AuctionHouseBot.DivisibleStacks"        , false);
     ElapsingTimeClass              = sConfigMgr->GetOption<uint32>("AuctionHouseBot.DuplicatesCount"        , 1);

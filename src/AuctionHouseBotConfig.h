@@ -183,6 +183,7 @@ public:
     bool   BuyMethod;
     bool   SellMethod;
     bool   SellAtMarketPrice;
+    uint32 MarketResetThreshold;
     bool   ConsiderOnlyBotAuctions;
     uint32 ItemsPerCycle;
 

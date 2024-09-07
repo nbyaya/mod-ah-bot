@@ -51,6 +51,13 @@
 #        Should the Seller use the market price for its auctions?
 #    Default 0 (disabled)
 #
+#    AuctionHouseBot.MarketResetThreshold
+#        How many auctions of the same item are necessary before the plain priceis adopted.
+#        Before reaching this threshold, the price increase/decrease according to an heuristic.
+#        Set this variable to a lower value to have a fast reacting market price,
+#        to an high value to smooth the oscillations in prices.
+#    Default 25
+#
 #    Auction House Bot character data
 #        AuctionHouseBot.Account is the account number
 #         (in realmd->account table) of the player you want to run
@@ -102,6 +109,7 @@ AuctionHouseBot.EnableBuyer = 0
 AuctionHouseBot.UseBuyPriceForSeller = 0
 AuctionHouseBot.UseBuyPriceForBuyer = 0
 AuctionHouseBot.UseMarketPriceForSeller = 0
+AuctionHouseBot.MarketResetThreshold = 25
 AuctionHouseBot.Account = 0
 AuctionHouseBot.GUID = 0
 AuctionHouseBot.ItemsPerCycle = 200
