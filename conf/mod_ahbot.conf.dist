@@ -47,6 +47,10 @@
 #        Should the Buyer use BuyPrice or SellPrice to determine Bid Prices
 #    Default 0 (use SellPrice)
 #
+#    AuctionHouseBot.UseMarketPriceForSeller
+#        Should the Seller use the market price for its auctions?
+#    Default 0 (disabled)
+#
 #    Auction House Bot character data
 #        AuctionHouseBot.Account is the account number
 #         (in realmd->account table) of the player you want to run
@@ -83,7 +87,6 @@
 #        2 = shorts, auctions lasts within an hour
 #    Default 1
 #
-#
 ###############################################################################
 
 AuctionHouseBot.DEBUG = 0
@@ -98,6 +101,7 @@ AuctionHouseBot.EnableSeller = 0
 AuctionHouseBot.EnableBuyer = 0
 AuctionHouseBot.UseBuyPriceForSeller = 0
 AuctionHouseBot.UseBuyPriceForBuyer = 0
+AuctionHouseBot.UseMarketPriceForSeller = 0
 AuctionHouseBot.Account = 0
 AuctionHouseBot.GUID = 0
 AuctionHouseBot.ItemsPerCycle = 200

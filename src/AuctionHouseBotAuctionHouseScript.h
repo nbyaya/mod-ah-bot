@@ -21,8 +21,10 @@ public:
     void OnBeforeAuctionHouseMgrSendAuctionExpiredMail   (AuctionHouseMgr* auctionHouseMgr, AuctionEntry* auction, Player* owner, uint32& owner_accId, bool& sendNotification, bool& sendMail) override;
     void OnBeforeAuctionHouseMgrSendAuctionOutbiddedMail (AuctionHouseMgr* auctionHouseMgr, AuctionEntry* auction, Player* oldBidder, uint32& oldBidder_accId, Player* newBidder, uint32& newPrice, bool& sendNotification, bool& sendMail) override;
 
-    void OnAuctionAdd   (AuctionHouseObject* ah, AuctionEntry* auction) override;
-    void OnAuctionRemove(AuctionHouseObject* ah, AuctionEntry* auction) override;
+    void OnAuctionAdd       (AuctionHouseObject* ah, AuctionEntry* auction) override;
+    void OnAuctionRemove    (AuctionHouseObject* ah, AuctionEntry* auction) override;
+    void OnAuctionSuccessful(AuctionHouseObject* ah, AuctionEntry* auction) override;
+    void OnAuctionExpire    (AuctionHouseObject* ah, AuctionEntry* auction) override;
 
     void OnBeforeAuctionHouseMgrUpdate() override;
 };

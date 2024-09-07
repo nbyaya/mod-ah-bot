@@ -508,6 +508,7 @@ void AHBConfig::Reset()
 
     BuyMethod                      = false;
     SellMethod                     = false;
+    SellAtMarketPrice              = false;
     ConsiderOnlyBotAuctions        = false;
     ItemsPerCycle                  = 200;
 
@@ -591,6 +592,10 @@ void AHBConfig::Reset()
     PurpleItemsBin.clear();
     OrangeItemsBin.clear();
     YellowItemsBin.clear();
+
+    itemsCount.clear();
+    itemsSum.clear();
+    itemsPrice.clear();
 }
 
 uint32 AHBConfig::GetAHID()
@@ -1945,6 +1950,69 @@ uint32 AHBConfig::GetBidsPerInterval()
     return buyerBidsPerInterval;
 }
 
+void AHBConfig::UpdateItemStats(uint32 id, uint32 stackSize, uint64 buyout)
+{
+    if (!stackSize)
+    {
+        return;
+    }
+
+    // 
+    // Collects information about the item bought
+    //
+
+    uint32 perUnit = buyout / stackSize;
+
+    if (itemsCount.count(id) == 0)
+    {
+        itemsCount[id] = 1;
+        itemsSum[id]   = perUnit;
+        itemsPrice[id] = perUnit;
+    }
+    else
+    {
+        itemsCount[id]++;
+
+        //
+        // Reset the statistics at about every 100 buyout to force adapt to the market price
+        // This can cause spikes if this auction in particular is unbalanced, but adds
+        // some movement into the market that can make it an interesting opportunity.
+        //
+
+        if (itemsCount[id] > 100 + (urand(1, 19) - 10))
+        {
+            itemsCount[id] = 1;
+            itemsSum[id]   = perUnit;
+            itemsPrice[id] = perUnit;
+        }
+        else
+        {
+            //
+            // Here is decided the price for single unit:
+            // right now is a plain, boring average of the ~100 previous auctions.
+            //
+
+            itemsSum[id]   = (itemsSum[id] + perUnit);
+            itemsPrice[id] = itemsSum[id] / itemsCount[id];
+        }
+    }
+
+    if (DebugOutConfig)
+    {
+        LOG_INFO("module", "Updating market price item={}, price={}", id, itemsPrice[id]);
+    }
+}
+
+uint64 AHBConfig::GetItemPrice(uint32 id)
+{
+    if (itemsCount.count(id) != 0)
+    {
+        return itemsPrice[id];
+    }
+
+    return 0;
+}
+
 void AHBConfig::Initialize(std::set<uint32> botsIds)
 {
     InitializeFromFile();
@@ -1971,6 +2039,7 @@ void AHBConfig::InitializeFromFile()
     AHBBuyer                       = sConfigMgr->GetOption<bool>  ("AuctionHouseBot.EnableBuyer"            , false);
     SellMethod                     = sConfigMgr->GetOption<bool>  ("AuctionHouseBot.UseBuyPriceForSeller"   , false);
     BuyMethod                      = sConfigMgr->GetOption<bool>  ("AuctionHouseBot.UseBuyPriceForBuyer"    , false);
+    SellAtMarketPrice              = sConfigMgr->GetOption<bool>  ("AuctionHouseBot.UseMarketPriceForSeller", false);
     DuplicatesCount                = sConfigMgr->GetOption<uint32>("AuctionHouseBot.DuplicatesCount"        , 0);
     DivisibleStacks                = sConfigMgr->GetOption<bool>  ("AuctionHouseBot.DivisibleStacks"        , false);
     ElapsingTimeClass              = sConfigMgr->GetOption<uint32>("AuctionHouseBot.DuplicatesCount"        , 1);
